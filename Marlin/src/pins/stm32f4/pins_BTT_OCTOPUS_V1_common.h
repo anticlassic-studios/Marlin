@@ -54,8 +54,9 @@
 //
 #define X_DIAG_PIN                          PG6   // X-STOP
 #define Y_DIAG_PIN                          PG9   // Y-STOP
-#define Z_DIAG_PIN                          PG10  // Z-STOP
-#define Z2_DIAG_PIN                         PG11  // Z2-STOP
+#define Y2_DIAG_PIN                         PG10  // Y2-STOP
+#define Z_DIAG_PIN                          PG11  // Z-STOP
+
 #define E0_DIAG_PIN                         PG12  // E0DET
 #define E1_DIAG_PIN                         PG13  // E1DET
 #define E2_DIAG_PIN                         PG14  // E2DET
@@ -196,7 +197,6 @@
 #define E2_DIR_PIN                          PE3
 #define E2_ENABLE_PIN                       PD4
 #ifndef E2_CS_PIN
-
   #define E2_CS_PIN                         PE1
 #endif
 
@@ -280,11 +280,11 @@
   #define Y_SERIAL_TX_PIN                   PD11
   #define Y_SERIAL_RX_PIN        Y_SERIAL_TX_PIN
 
-  #define Z_SERIAL_TX_PIN                   PC6
-  #define Z_SERIAL_RX_PIN        Z_SERIAL_TX_PIN
+  #define Y2_SERIAL_TX_PIN                  PC6
+  #define Y2_SERIAL_RX_PIN      Y2_SERIAL_TX_PIN
 
-  #define Z2_SERIAL_TX_PIN                  PC7
-  #define Z2_SERIAL_RX_PIN      Z2_SERIAL_TX_PIN
+  #define Z_SERIAL_TX_PIN                   PC7
+  #define Z_SERIAL_RX_PIN        Z_SERIAL_TX_PIN
 
   #define E0_SERIAL_TX_PIN                  PF2
   #define E0_SERIAL_RX_PIN      E0_SERIAL_TX_PIN
