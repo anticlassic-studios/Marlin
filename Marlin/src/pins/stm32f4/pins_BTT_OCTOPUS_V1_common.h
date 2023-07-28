@@ -43,6 +43,7 @@
 // Servos
 //
 #define SERVO0_PIN                          PB6
+#define SERVO1_PIN                          PC5
 
 //
 // Misc. Functions
