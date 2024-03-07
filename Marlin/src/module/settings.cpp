@@ -294,11 +294,7 @@ typedef struct SettingsDataStruct {
   uint8_t grid_max_x, grid_max_y;                       // GRID_MAX_POINTS_X, GRID_MAX_POINTS_Y
   uint16_t grid_check;                                  // Hash to check against X/Y
   xy_pos_t bilinear_grid_spacing, bilinear_start;       // G29 L F
-  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-    bed_mesh_t z_values;                                // G29
-  #else
-    float z_values[3][3];
-  #endif
+  float z_values[3][3];
 
   //
   // X_AXIS_TWIST_COMPENSATION
@@ -1014,12 +1010,11 @@ void MarlinSettings::postprocess() {
         EEPROM_WRITE(bilinear_start);
       #endif
 
-      #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
-        EEPROM_WRITE(bedlevel.z_values);              // 9-256 floats
-      #else
-        dummyf = 0;
-        for (uint16_t q = grid_max_x * grid_max_y; q--;) EEPROM_WRITE(dummyf);
-      #endif
+      const uint8_t dummy_grid_max_x = 3;
+      const uint8_t dummy_grid_max_y = 3;
+      for (uint16_t q = dummy_grid_max_x * dummy_grid_max_y; q--;) {
+        EEPROM_WRITE(dummyf);
+      }
     }
 
     //
@@ -2028,18 +2023,24 @@ void MarlinSettings::postprocess() {
           if (grid_max_x == (GRID_MAX_POINTS_X) && grid_max_y == (GRID_MAX_POINTS_Y)) {
             if (!validating) set_bed_leveling_enabled(false);
             bedlevel.set_grid(spacing, start);
-            EEPROM_READ(bedlevel.z_values);                 // 9 to 256 floats
+            for (uint8_t py = 0; py < GRID_MAX_POINTS_Y; ++py) {
+              for (uint8_t px = 0; px < GRID_MAX_POINTS_X; ++px) {
+                bedlevel.z_values[px][py] = 0.0;
+              }
+            }
           }
           else if (grid_max_x > (GRID_MAX_POINTS_X) || grid_max_y > (GRID_MAX_POINTS_Y)) {
             eeprom_error = ERR_EEPROM_CORRUPT;
             break;
           }
-          else // EEPROM data is stale
         #endif // AUTO_BED_LEVELING_BILINEAR
-          {
-            // Skip past disabled (or stale) Bilinear Grid data
-            for (uint16_t q = grid_max_x * grid_max_y; q--;) EEPROM_READ(dummyf);
-          }
+
+        // Skip past disabled (or stale) Bilinear Grid data
+        const uint8_t dummy_grid_max_x = 3;
+        const uint8_t dummy_grid_max_y = 3;
+        for (uint16_t q = dummy_grid_max_x * dummy_grid_max_y; q--;) {
+          EEPROM_READ(dummyf);
+        }
       }
 
       //
