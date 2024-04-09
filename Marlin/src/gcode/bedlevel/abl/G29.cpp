@@ -298,7 +298,7 @@ G29_TYPE GcodeSuite::G29() {
         }
 
         const float rz = parser.seenval('Z') ? RAW_Z_POSITION(parser.value_linear_units()) : current_position.z;
-        if (!WITHIN(rz, -10, 10)) {
+        if (!WITHIN(rz, -20, 20)) {
           SERIAL_ERROR_MSG("Bad Z value");
           G29_RETURN(false, false);
         }
